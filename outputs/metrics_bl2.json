@@ -1,0 +1,14 @@
+{
+  "Total Claims": 300,
+  "Label Accuracy": 0.4767,
+  "Abstention Rate": 0.01,
+  "Evidence Precision": 0.4276,
+  "Evidence Recall": 0.6077,
+  "Evidence F1": 0.502,
+  "Per-Class Accuracy": {
+    "SUPPORT": 0.9194,
+    "CONTRADICT": 0.4375,
+    "NOT_ENOUGH_INFO": 0.0089
+  },
+  "Macro Accuracy": 0.4553
+}
