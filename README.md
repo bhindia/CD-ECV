@@ -49,20 +49,13 @@ Possible labels include:
 ### 4. Evidence-Grounded Output
 Predictions are produced together with supporting evidence sentences to ensure traceability and interpretability.
 
----
-
-## Modular Refactor
-
-The original implementation was developed inside a single monolithic notebook cell.  
-This repository refactors the system into a modular Python pipeline to improve clarity, reproducibility, and maintainability.
-
 ## Installation
 
 Clone the repository and install the required dependencies. 
 git clone https://github.com/bhindia/CD-ECV.git
 cd CD-ECV
 pip install -r requirements.txt
------
+
 ## Running the System
 
 To run the verification pipeline:
