@@ -56,28 +56,9 @@ Predictions are produced together with supporting evidence sentences to ensure t
 The original implementation was developed inside a single monolithic notebook cell.  
 This repository refactors the system into a modular Python pipeline to improve clarity, reproducibility, and maintainability.
 
-### Repository Structure
-cd_ecv/
-│
-├── config.py # Tunable constants and configuration
-├── utils.py # Lexical scoring and helper functions
-├── data.py # Corpus and claim loaders
-├── retrieval.py # BM25 retrieval, dense prefiltering, sentence reranking
-├── inference.py # Answer construction and label prediction
-├── metrics.py # Evaluation metrics and confusion matrix utilities
-├── models.py # Model loading
-├── pipeline.py # Pipeline orchestration
-│
-main.py # Entry point for running the system
-
-
----
-
 ## Installation
 
-Clone the repository and install the required dependencies.
-
-
+Clone the repository and install the required dependencies. 
 git clone https://github.com/bhindia/CD-ECV.git
 cd CD-ECV
 pip install -r requirements.txt
