@@ -1,48 +1,103 @@
-# CD-ECV modular refactor (updated)
+# CD-ECV: Deterministic Evidence-Grounded Scientific Claim Verification
 
-This update fixes the weakest part of the first refactor: file and dataset handling.
+CD-ECV (Citation-Driven Evidence-Constrained Verification) is a deterministic framework designed to improve reliability in automated scientific claim verification systems. The system enforces evidence grounding by constraining predictions to verifiable sentences retrieved from source documents, reducing hallucination and unsupported reasoning in AI pipelines.
 
-## What changed
+This project investigates how structured retrieval, deterministic safeguards, and evidence-constrained reasoning can improve trustworthiness in language-model-assisted scientific analysis.
 
-- Added `cd_ecv/io_utils.py` for:
-  - `download_url(...)`
-  - `safe_extract_tar_gz(...)`
-  - `read_jsonl(...)`
-  - `find_required_files(...)`
-- Moved file discovery out of `main.py`
-- Updated `data.py` to use `read_jsonl(...)`
-- Changed `CDConfig.sci_dir` default to `/content/scifact/data`
-- Replaced brittle assertion-based file discovery with proper `FileNotFoundError`
+---
 
-## Folder layout
+## Project Motivation
 
-```text
-cd_ecv_modular_v2/
-├── cd_ecv/
-│   ├── __init__.py
-│   ├── config.py
-│   ├── io_utils.py
-│   ├── data.py
-│   ├── inference.py
-│   ├── metrics.py
-│   ├── models.py
-│   ├── pipeline.py
-│   ├── retrieval.py
-│   └── utils.py
-├── main.py
-└── README.md
-```
+Large language models often generate fluent explanations that are not fully grounded in verifiable evidence. This can introduce hallucinations and unsupported claims, especially in scientific or high-impact domains.
 
-## Expected dataset location
+CD-ECV addresses this problem by introducing a **deterministic evidence-grounded pipeline**, where predictions are derived strictly from retrieved evidence sentences rather than unconstrained generation.
 
-By default, the code now looks under:
+The goal is to explore how structured retrieval and verification mechanisms can improve factual reliability and transparency in automated reasoning systems.
 
-```python
-Path('/content/scifact/data')
-```
+---
 
-So these files should exist there:
-- `/content/scifact/data/corpus.jsonl`
-- `/content/scifact/data/claims_dev.jsonl`
+## System Overview
 
-If your files live elsewhere, change `sci_dir` in `cd_ecv/config.py`.
+The CD-ECV pipeline consists of several stages:
+
+### 1. Retrieval
+Candidate evidence sentences are retrieved from a document corpus using a hybrid retrieval approach.
+
+- BM25 lexical retrieval
+- Dense embedding retrieval
+- Candidate document prefiltering
+
+### 2. Evidence Filtering
+Retrieved sentences are filtered using relevance and focus scoring methods.
+
+Filtering criteria include:
+- lexical overlap
+- semantic similarity
+- focus scoring
+
+Low-density evidence claims may be rejected early to avoid unsupported predictions.
+
+### 3. Verification
+A cross-encoder Natural Language Inference (NLI) model evaluates claim–evidence pairs and predicts the relationship between them.
+
+Possible labels include:
+
+- **SUPPORT**
+- **CONTRADICT**
+- **NOT_ENOUGH_INFO**
+
+### 4. Evidence-Grounded Output
+Predictions are produced together with supporting evidence sentences to ensure traceability and interpretability.
+
+---
+
+## Modular Refactor
+
+The original implementation was developed inside a single monolithic notebook cell.  
+This repository refactors the system into a modular Python pipeline to improve clarity, reproducibility, and maintainability.
+
+### Repository Structure
+cd_ecv/
+│
+├── config.py # Tunable constants and configuration
+├── utils.py # Lexical scoring and helper functions
+├── data.py # Corpus and claim loaders
+├── retrieval.py # BM25 retrieval, dense prefiltering, sentence reranking
+├── inference.py # Answer construction and label prediction
+├── metrics.py # Evaluation metrics and confusion matrix utilities
+├── models.py # Model loading
+├── pipeline.py # Pipeline orchestration
+│
+main.py # Entry point for running the system
+
+
+---
+
+## Installation
+
+Clone the repository and install the required dependencies.
+
+
+git clone https://github.com/bhindia/CD-ECV.git
+cd CD-ECV
+pip install -r requirements.txt
+-----
+## Running the System
+
+To run the verification pipeline:
+
+python main.py
+
+This will:
+
+Load the corpus and claim dataset
+
+Retrieve candidate evidence sentences
+
+Filter and rerank evidence
+
+Run NLI verification
+
+Produce predictions and evaluation metrics
+
+``````bash
